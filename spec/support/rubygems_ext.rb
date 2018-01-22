@@ -33,7 +33,14 @@ module Spec
 
       ENV["BUNDLE_PATH"] = nil
       ENV["GEM_HOME"] = ENV["GEM_PATH"] = Path.base_system_gems.to_s
+      puts "[DEBUG] GEM_HOME=GEM_PATH=#{Path.base_system_gems.to_s}"
       ENV["PATH"] = ["#{Path.root}/exe", "#{Path.system_gem_path}/bin", ENV["PATH"]].join(File::PATH_SEPARATOR)
+
+      puts "[DEBUG] Gem.configuration gem: #{Gem.configuration['gem']}"
+      Gem.configuration['gem'] = ''
+      Gem.configuration.each do |name, value|
+        puts "[DEBUG] Gem.configuration: #{name.inspect} => #{value.inspect}"
+      end
 
       manifest = DEPS.to_a.sort_by(&:first).map {|k, v| "#{k} => #{v}\n" }
       manifest_path = "#{Path.base_system_gems}/manifest.txt"
@@ -62,6 +69,14 @@ module Spec
       cmd = "gem install #{deps} --no-rdoc --no-ri --conservative"
       puts cmd
       system(cmd) || raise("Installing gems #{deps} for the tests to use failed!")
+      # Debug
+      sleep 5
+      cmd = 'gem env'
+      puts "[DEBUG] #{cmd}"
+      system(cmd)
+      cmd = 'gem list'
+      puts "[DEBUG] #{cmd}"
+      system(cmd)
     end
   end
 end

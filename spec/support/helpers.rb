@@ -218,6 +218,7 @@ module Spec
     bang :gem_command
 
     def sys_exec(cmd)
+      #puts("sys_exec cmd: #{cmd}")
       command_execution = CommandExecution.new(cmd.to_s, Dir.pwd)
 
       Open3.popen3(cmd.to_s) do |stdin, stdout, stderr, wait_thr|
